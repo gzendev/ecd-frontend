@@ -1,0 +1,19 @@
+<div class="gefco-mat-filter">
+    <mat-option>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="0 0 auto">
+          <mat-icon>search</mat-icon>
+        </div>
+        <div fxFlex>
+          <input
+            matInput
+            #filterInput
+            [placeholder]="placeholder"
+            (keyup)="filter($event.target)"
+            (keydown)="$event.stopPropagation()">
+        </div>
+      </div>
+    </mat-option>
+    <mat-divider></mat-divider>
+  </div>
+  

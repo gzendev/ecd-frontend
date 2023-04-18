@@ -1,0 +1,102 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!loading">
+    <h2 mat-dialog-title>
+      <span *ngIf="viewing"> TRAZABILIDAD LEGAJO - ver</span>
+    </h2>
+    <div fxLayout="column" fxLayoutGap="1rem">
+      <form #form="ngForm" novalidate>
+        <mat-dialog-content>
+          <div fxLayout="row wrap" fxLayoutGap="2rem">
+            <div fxFlex>
+              <mat-form-field fxFlexFill>
+                <mat-select #pais="ngModel" [(ngModel)]="trazabilidadLegajo.pais" name="pais" [disabled]="viewing"
+                  [compareWith]="compareId" placeholder="Pais" (selectionChange)="loadCliente($event)" required>
+                  <mat-option *ngFor="let pais of paises" [value]="pais">
+                    {{ pais.getFullDescription() }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="pais.hasError('required')">
+                  Pais requerido
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+                <mat-form-field fxFlexFill>
+                <mat-select #cliente="ngModel" placeholder="Cliente" name="cliente" [(ngModel)]="trazabilidadLegajo.cliente" [disabled]="viewing" [compareWith]="compareId" (selectionChange)="loadCuenta($event)" required>
+                  <mat-option *ngFor="let cliente of clientes" [value]="cliente">
+                    {{ cliente.getFullDescription() }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="cliente.hasError('required')">
+                  Cliente requerido
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+                <mat-form-field fxFlexFill>
+                <mat-select #cuenta="ngModel" placeholder="Cuenta" name="cuenta" [(ngModel)]="trazabilidadLegajo.cuenta" [disabled]="viewing" [compareWith]="compareId" (selectionChange)="loadSubcuenta($event)" required>
+                  <mat-option *ngFor="let cuenta of cuentas">
+                    {{ cuenta.getFullDescription() }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="cuenta.hasError('required')">
+                  Cuenta requerida
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+                <mat-form-field fxFlexFill>
+                <mat-select #subcuenta="ngModel" placeholder="Subcuenta" name="subcuenta" [(ngModel)]="trazabilidadLegajo.subcuenta" [disabled]="viewing" [compareWith]="compareId" required>
+                  <mat-option *ngFor="let subcuenta of subcuentas" [value]="subcuenta">
+                    {{ subcuenta.getFullDescription() }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="subcuenta.hasError('required')">
+                  Subcuenta requerida
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field fxFlexFill>
+                <input matInput #idInput="ngModel" [(ngModel)]="trazabilidadLegajo.id" [disabled]="viewing"
+                  name="id" placeholder="Codigo" mask="0000" required>
+                <mat-error *ngIf="idInput.hasError('required')">
+                  Codigo requerido
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="2rem">
+            <div fxFlex>
+              <mat-form-field fxFlexFill>
+                <input matInput #descripcionInput="ngModel" [(ngModel)]="trazabilidadLegajo.descripcion" name="descripcion"
+                  [disabled]="viewing" placeholder=" Descripcion" maxlength="50" required>
+                <mat-error *ngIf="descripcionInput.hasError('required')">
+                  Descripcion requerido
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex fxLayoutAlign="start center">
+              <mat-slide-toggle [(ngModel)]="trazabilidadLegajo.activo" [disabled]="viewing" name="activo" color="accent">
+                Activo
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+          <button mat-raised-button mat-dialog-close type="button" color="basic">
+            Volver
+          </button>
+        </mat-dialog-actions>
+      </form>
+      <!-- <app-audit
+          *ngIf="!creating"
+          [crud]="'tipoProveedor'"
+          [lastLog]="tipoProveedor"
+          [logKey]="tipoProveedorLogKey"
+          [commonApi]="true">
+        </app-audit> -->
+    </div>
+  </div>

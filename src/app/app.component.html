@@ -1,0 +1,7 @@
+<div fxLayout="column" fxFlexFill>
+  <div fxFlex>
+    <ngx-alerts></ngx-alerts>
+    <mat-progress-bar [value]="loadingBarService.progress$ | async" mode="determinate"></mat-progress-bar>
+    <router-outlet></router-outlet>
+  </div>
+</div>

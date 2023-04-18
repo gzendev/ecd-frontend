@@ -1,0 +1,44 @@
+<mat-toolbar color="primary" *ngIf="auth">
+  <div>
+    <button mat-icon-button class="icon-menu" (click)="openMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>ECD</span>
+  </div>
+  <span class="spacer"></span>
+  <label class="lb-nombre">Andres M Grilj</label>
+  <label class="lb-apellido">(agrilj)</label>
+  <span></span>
+  <label class="lb-ambiente">{{ ambiente }}</label>
+  <span></span>
+<!--   <button mat-icon-button class="icon-language" matTooltip="Idioma">
+    <mat-icon>language</mat-icon>
+  </button> -->
+  <button
+    mat-icon-button
+    class="icon-account_circle"
+    matTooltip="Perfil de Usuario"
+    [matMenuTriggerFor]="menu"
+  >
+    <mat-icon>account_circle</mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="profile">
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </button>
+     <!--  <button mat-menu-item>
+        <mat-icon>brightness_5</mat-icon>
+        <span>Configuración</span>
+      </button> -->
+    </mat-menu>
+  </button>
+  <button
+    mat-icon-button
+    class="example-icon"
+    routerLink=""
+    matTooltip="Cerrar sesión"
+    (click)="logout()"
+  >
+    <mat-icon>login</mat-icon>
+  </button>
+</mat-toolbar>

@@ -1,0 +1,209 @@
+<div class="gefco-table">
+    <p-table
+    #table
+    [columns]="visibleColumns"
+    [value]="tableData"
+    [rows]="tableTemplate.pageSize"
+    [first]="tableTemplate.pageFirst"
+    [totalRecords]="tableData.length"
+    [multiSortMeta]="multiSortMeta"
+    [reorderableColumns]="true"
+    [paginator]="true"
+    [autoLayout]="true"
+    [responsive]="true"
+    [customSort]="true"
+    (onSort)="onColumnSort($event)"
+    (onColReorder)="onColumnReorder($event)"
+    (onPage)="onPageChange($event)"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowExpand)="onRowExpand($event)"
+    (sortFunction)="sortColumnData($event)"
+    [rowHover]="true"
+    selectionMode="single"
+    scrollHeight="373px"
+    sortMode="multiple"
+    dataKey="id"
+    styleClass="p-datatable-sm" 
+    responsiveLayout="scroll"
+    >
+
+    <ng-template pTemplate="caption">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0.5rem">
+            <div fxFlex="0 0 auto">
+                <p-dropdown 
+                matTooltip="Elija la cantidad de filas que desea ver por página"
+                [(ngModel)]="tableTemplate.pageSize"
+                [options]="pageSizeOptions"
+                (onChange)="onPageSizeChange()">                   
+                </p-dropdown>
+            </div>
+            <div fxFlex="0 0 auto">
+                <p-multiSelect
+                [(ngModel)]="visibleColumns"
+                [options]="columns"
+                (onChange)="onColumnsVisibilityChange($event)"
+                optionLabel="header"
+                selectedItemsLabel="{0} Columnas seleccionadas"
+                defaultLabel="Elija columnas"
+                matTooltip="Elija qué columnas desea ver en la grilla. Arrastre los títulos de la grilla para reorganizar el orden de las columnas.">
+                </p-multiSelect>
+            </div>
+            <div fxFlex=" 0 0 auto">
+                <input
+                pInputText
+                class="global"
+                (input)="filterGlobal(table, $event.target)"
+                size="50"
+                placeholder="Filtro global"
+                matTooltip="Ingrese texto para realizar un filtrado rápido sobre la grilla">
+            </div>
+            <div fxFlex>
+                <div fxFlayout="row" fxLayoutAling="center center" fxLayoutGap="0.5rem">
+                    <button
+                    mat-raised-button
+                    (click)="onExportRows()"
+                    color="primary">
+                    Exportar
+                    </button>
+                </div>
+            </div>
+            <div fxFlex><!-- ver -->
+                <div
+                *ngIf="tableData.length >= limit"
+                fxLayout="row"
+                fxLayoutAling="end center"
+                (click)="showParcialResultDialog()"
+                class="cursor-pointer">
+                <mat-icon class="color-orange mr-1">warning</mat-icon>
+                <a>Resultado Parcial</a>
+                </div>
+            <div
+            *ngIf="tableData.length < limit"
+                fxLayout="row"
+                fxLayoutAling="end center"
+                >
+                <span class="mr-1 font-light font-small">Registros:</span>
+                <span class="mr-1 font-small">{{ tableData.length }}</span>
+                    <mat-icon
+                    matSuffix
+                    matTooltip="Cantidad de registros recuperados de la base de datos (sin considerar filtros rápidos de grilla)">
+                    help
+                    </mat-icon>  
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let column of visibleColumns">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let columns>
+        <tr>
+            <th class="sticky" *ngIf="!showC">
+                Acciones
+            </th>
+            <ng-container *ngFor="let column of visibleColumns">
+                <th
+                *ngIf="column.field !== 'acciones'"
+                [pSortableColumn]="column.field"
+                pReorderableColumn
+                >
+                {{column.header}}
+                <p-sortIcon [field]="column.field"></p-sortIcon>
+                </th>
+            </ng-container>
+        </tr>
+        <tr>
+            <th class="sticky" *ngIf="!showC"></th>
+            <th *ngFor="let column of visibleColumns">
+                <input
+                *ngIf="(column.field !== 'acciones')"
+                (input)="filterColumn(table, $event.target, column.field)"
+                class="full-width">
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let columns="visibleColumns" let-row>
+        <tr [pSelectableRow]="selectRow.observers.length > 0 ? row : null" [ngClass]="{'inactive': !row.activoBoolean}">
+          <td class="sticky-back" [ngClass]="{'inactive': !row.activoBoolean}" *ngIf="!showC">
+            <div fxLayout="row" fxLayoutGap="-0.3rem" class="sticky">
+              <div fxFlex [ngClass]="{ hident : showV}">
+                <mat-icon
+                class="cursor-pointer"
+                (click)="onViewRow(row)"
+                title="Ver"
+                >visibility
+                </mat-icon>
+              </div>
+              <div fxFlex [ngClass]="{ hident : showU}">
+                <mat-icon
+                class="cursor-pointer"
+                (click)="onEditRow(row)"
+                title="Editar">
+                edit</mat-icon>
+              </div>
+              <div fxFlex [ngClass]="{ hident : showD}">
+                <mat-icon
+                class="cursor-pointer"
+                title="Borrar"
+                (click)="onDeleteRow(row)"
+                [ngClass]="{'invisible': !row.activoBoolean}">
+                delete</mat-icon>
+              </div>
+              <div fxFlex [ngClass]="{ hident : showM}" class="mr-1">
+                <mat-icon
+                class="cursor-pointer"
+                (click)="onMenuRow(row)"
+                title="Menu">
+                more_vert</mat-icon>
+              </div>
+            </div>
+          </td>
+          <td *ngFor="let column of visibleColumns; let i = index" [ngStyle]="{'background-color': getColor(row)}">
+              <ng-container>
+                  {{ row[column.field]}}
+              </ng-container>
+          </td> 
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-columns="visibleColumns" let-row>
+      <tr *ngFor="let expanded of row.expanded" [pSelectableRow]="selectRow.observers.length > 0 ? expanded : null" [ngClass]="{'inactive': !expanded.activoBoolean}">
+        <td class="sticky">
+          <div fxLayout="row" fxLayoutGap="0.5rem">
+            <div fxFlex>
+              <mat-icon
+                class="cursor-pointer"
+                (click)="onViewRow(row)"
+                title="Ver"
+                >visibility
+              </mat-icon>
+            </div>
+            <div fxFlex>
+              <mat-icon
+                class="cursor-pointer"
+                (click)="onEditRow(row)"
+                title="Editar">
+                edit
+              </mat-icon>
+            </div>
+            <div fxFlex>
+              <mat-icon
+                class="cursor-pointer"
+                title="Borrar"
+                (click)="onDeleteRow(row)"
+                [ngClass]="{'invisible': !row.activoBoolean}">
+                delete
+              </mat-icon>
+            </div>
+          </div>
+        </td>
+        <td *ngFor="let column of visibleColumns">
+          <ng-container>
+            {{ expanded[column.field] }}
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+    </p-table>
+</div>

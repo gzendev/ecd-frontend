@@ -1,0 +1,220 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <h2 mat-dialog-title>
+    <span *ngIf="viewing">DOCUMENTO VENTA - ver</span>
+    <span *ngIf="!viewing && creating">DOCUMENTO VENTA- Crear</span>
+    <span *ngIf="!viewing && !creating">DOCUMENTO VENTA- editar</span>
+  </h2>
+  <form #form="ngForm" novalidate>
+    <mat-dialog-content>
+      <div fxLayout="row wrap" fxLayoutGap="2rem">
+        
+        <div fxFlex>
+          <mat-form-field fxFlexFill>
+            <mat-select #pais="ngModel" 
+            [(ngModel)]="documentoVenta.pais" 
+            name="pais" 
+            [disabled]="viewing || !creating"
+              placeholder="{{placeholders[12]}}"
+              (selectionChange)="loadCliente($event)"
+              (selectionChange)="loadDocumento($event)"
+              (selectionChange)="loadVenta($event)"
+              (selectionChange)="loadOrigen($event)"
+              (selectionChange)="loadClienteFacturacion($event)"
+              [compareWith]="compareId"
+               required>
+               <app-gefco-mat-filter [array]="paises" [converter]="displayMetadataItem" placeholder="Buscar">
+               </app-gefco-mat-filter>
+              <mat-option *ngFor="let pais of paises" [value]="pais">
+                {{ pais.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="pais.hasError('required')">
+              Pais requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar" fxFlexFill>
+            <mat-select #cliente="ngModel" placeholder="{{placeholders[13]}}" name="cliente" [(ngModel)]="documentoVenta.cliente"
+              [disabled]="viewing || !creating || clientes.length === 0" (selectionChange)="loadCuenta($event)" [compareWith]="compareId" required>
+              <app-gefco-mat-filter [array]="clientes" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let cliente of clientes" [value]="cliente">
+                {{ cliente.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="cliente.hasError('required')">
+              Cliente requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar1" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar1" fxFlexFill>
+            <mat-select #cuenta="ngModel" placeholder="{{placeholders[14]}}" name="cuenta" [(ngModel)]="documentoVenta.cuenta"
+              [disabled]="viewing ||!creating || cuentas.length === 0" (selectionChange)="loadSubcuenta($event)" [compareWith]="compareId" required>
+              <app-gefco-mat-filter [array]="cuentas" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta" >
+                {{ cuenta.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="cuenta.hasError('required')">
+              Cuenta requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar2" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar2" fxFlexFill>
+            <mat-select #subcuenta="ngModel" placeholder="{{placeholders[15]}}" name="subcuenta"
+              [(ngModel)]="documentoVenta.subcuenta" [compareWith]="compareId" [disabled]="viewing ||!creating || subcuentas.length === 0" required>
+              <app-gefco-mat-filter [array]="subcuentas" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let subcuenta of subcuentas" [value]="subcuenta">
+                {{ subcuenta.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="subcuenta.hasError('required')">
+              Subcuenta requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar3" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar3" fxFlexFill>
+            <mat-select #clienteFacturacion="ngModel" placeholder="{{placeholders[9]}}" name="clienteFacturacion"
+              [(ngModel)]="documentoVenta.clienteFacturacion" [compareWith]="compareId" [disabled]="viewing ||!creating || clientesFacturacion.length === 0">
+              <app-gefco-mat-filter [array]="clientesFacturacion" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let clienteFacturacion of clientesFacturacion" [value]="clienteFacturacion">
+                {{ clienteFacturacion.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="clienteFacturacion.hasError('required')">
+              Cliente Facturacion requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar4" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar4" fxFlexFill>
+            <mat-select #documento="ngModel" placeholder="{{placeholders[3]}}" name="documento"
+              [(ngModel)]="documentoVenta.documento" [compareWith]="compareId" [disabled]="viewing ||!creating || documentos.length === 0" required>
+              <app-gefco-mat-filter [array]="documentos" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let documento of documentos" [value]="documento">
+                {{ documento.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="documento.hasError('required')">
+              Documento requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar5" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar5" fxFlexFill>
+            <mat-select #venta="ngModel" placeholder="{{placeholders[1]}}" name="venta" [(ngModel)]="documentoVenta.venta" [compareWith]="compareId"
+              [disabled]="viewing ||!creating || ventas.length === 0" required>
+              <app-gefco-mat-filter [array]="ventas" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let venta of ventas" [value]="venta">
+                {{ venta.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="venta.hasError('required')">
+              Venta requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex>
+          <div *ngIf="!mostrar6" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="30"></mat-spinner>
+          </div>
+          <mat-form-field *ngIf="mostrar6" fxFlexFill>
+            <mat-select #origen="ngModel" placeholder="{{placeholders[5]}}" name="origen" [(ngModel)]="documentoVenta.origen" [compareWith]="compareId"
+              [disabled]="viewing ||!creating || origenes.length === 0" required>
+              <app-gefco-mat-filter [array]="origenes" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+              <mat-option *ngFor="let origen of origenes" [value]="origen">
+                {{ origen.getFullDescription() }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="origen.hasError('required')">
+              Origen requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div fxLayout="row wrap" fxLayoutGap="2rem">
+        
+        <div fxFlex>
+          <mat-form-field fxFlexFill>
+            <input matInput #subprestacionInput="ngModel" [(ngModel)]="documentoVenta.subprestacion" name="subprestacion"
+              maxlength="50" placeholder="{{placeholders[7]}}" [disabled]="viewing" >
+          </mat-form-field>
+        </div>
+
+        <div fxFlex fxLayoutAlign="start center">
+          <mat-slide-toggle [(ngModel)]="documentoVenta.activo" 
+          [disabled]="viewing"
+          name="activo" 
+          color="accent">
+            Activo
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close type="button" color="basic">
+        Volver
+      </button>
+      <button *ngIf="!viewing && creating" 
+      mat-raised-button 
+      (click)="createDocumentoVenta()" 
+      [disabled]="form.invalid"
+        color="primary">
+        Guardar
+      </button>
+      <button *ngIf="!viewing && !creating" 
+      mat-raised-button 
+      [disabled]="form.invalid" 
+      (click)="updateDocumentoVenta()"
+      color="primary">
+        Guardar
+      </button>
+    </mat-dialog-actions>
+  </form>
+  <!-- <app-audit
+      *ngIf="!creating"
+      [crud]="'tipoProveedor'"
+      [lastLog]="tipoProveedor"
+      [logKey]="tipoProveedorLogKey"
+      [commonApi]="true">
+    </app-audit> -->
+</div>

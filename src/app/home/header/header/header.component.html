@@ -1,0 +1,36 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1rem" color="primary">
+    <div fxFlex fxLayoutAlign="start center">
+      <button
+        mat-icon-button
+        (click)="sidenav.toggle()"
+        type="button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="nav-brand">ECD</span>
+    </div>
+    <div fxFlex="0 0 auto" fxLayoutAlign="center center">
+        <span class="font-small">{{ userId }}</span>
+        <span fxHide.xs class="font-small">{{ username }}</span>
+    </div>
+    <div fxFlex="0 0 auto" fxLayoutAlign="start center">
+     <!--  <a class="nav-icon cursor-pointer">
+        <mat-icon matTooltip="Idioma">language</mat-icon>
+      </a> -->
+      <a fxHide.xs class="nav-icon cursor-pointer mt-2-5" [matMenuTriggerFor]="menu">
+        <mat-icon matTooltip="Perfil de Usuario">account_circle</mat-icon>
+        <mat-menu #menu="matMenu" class="button-menu">
+          <button mat-menu-item routerLink="profile" >
+            <mat-icon>person</mat-icon>
+            <span>Perfil</span>
+          </button>
+         <!--  <button mat-menu-item>
+            <mat-icon>brightness_5</mat-icon>
+            <span>Configuración</span>
+          </button> -->
+        </mat-menu>
+      </a>
+      <button mat-icon-button class="example-icon" (click)="logout()">
+        <mat-icon matTooltip="Cerrar Sesion">exit_to_app</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>

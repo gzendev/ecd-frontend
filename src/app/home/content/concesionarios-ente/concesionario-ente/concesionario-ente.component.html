@@ -1,0 +1,223 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <h2 mat-dialog-title>
+    <span *ngIf="viewing">CONCESIONARIO ENTE - ver</span>
+    <span *ngIf="!viewing && creating">CONCESIONARIO ENTE - crear</span>
+    <span *ngIf="!viewing && !creating">CONCESIONARIO ENTE - editar</span>
+  </h2>
+  <div fxLayout="column" fxLayoutGap="1rem">
+    <form #form="ngForm" novalidate>
+      <mat-dialog-content>
+  
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+          
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <mat-select #pais="ngModel" placeholder="{{placeholders[10]}}" name="pais" [(ngModel)]="concesionarioEnte.pais" [disabled]="viewing || !creating" [compareWith]="compareId" (selectionChange)="loadCliente($event)" required>
+                <app-gefco-mat-filter [array]="paises" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let pais of paises" [value]="pais">
+                  {{ pais.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="pais.hasError('required')">
+                Pais requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+              <mat-form-field *ngIf="mostrar" fxFlexFill> 
+              <mat-select #cliente="ngModel" placeholder="{{placeholders[20]}}" name="cliente" [(ngModel)]="concesionarioEnte.cliente" [disabled]="viewing || !creating || clientes.length === 0" [compareWith]="compareId" required>
+                <app-gefco-mat-filter [array]="clientes" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let cliente of clientes" [value]="cliente">
+                  {{ cliente.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="cliente.hasError('required')">
+                Cliente requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex fxLayoutAlign="start center">
+            <mat-slide-toggle fxFlexFill [(ngModel)]="concesionarioEnte.activo" name="activo" color="accent" [disabled]="viewing">
+              Activo
+            </mat-slide-toggle>
+          </div>
+  
+        </div>
+        
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+          
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #codigoConcesionarioInput="ngModel" [(ngModel)]="concesionarioEnte.id" name="codigoconcesionario"
+              [disabled]="viewing || !creating" mask="0000" placeholder="{{placeholders[0]}}" required>
+              <mat-error *ngIf="codigoConcesionarioInput.hasError('required')">
+                Codigo requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput placeholder="Descripcion" #descripcionInput="ngModel" [(ngModel)]="concesionarioEnte.descripcion"
+                name="descripcion" placeholder="Descripción" maxlength="50" [disabled]="viewing" required>
+              <mat-error *ngIf="descripcionInput.hasError('required')">
+                Descripcion requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #direccionInput="ngModel" [(ngModel)]="concesionarioEnte.direccion" name="direccion"
+                maxlength="50" [disabled]="viewing" placeholder="{{placeholders[2]}}" required>
+              <mat-error *ngIf="direccionInput.hasError('required')">
+                Direccion requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <mat-select #paisConcesionario="ngModel" placeholder="{{placeholders[9]}}" name="paisConcesionario" [(ngModel)]="concesionarioEnte.paisEnte"
+              (selectionChange)="loadProvincia($event)" [disabled]="viewing" [compareWith]="compareId">
+              <app-gefco-mat-filter [array]="paisesCombo" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>  
+              <mat-option *ngFor="let pais of paisesCombo" [value]="pais">
+                  {{ pais.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="paisConcesionario.hasError('required')">
+                Pais del concesionario requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar1" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar1" fxFlexFill>
+              <mat-select #provincia="ngModel" placeholder="{{placeholders[7]}}" name="provincia" [(ngModel)]="concesionarioEnte.provincia" [compareWith]="compareId" (selectionChange)="loadCiudad($event)" [disabled]="viewing || provincias.length === 0">
+                <app-gefco-mat-filter [array]="provincias" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+                  {{ provincia.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="provincia.hasError('required')">
+                Provincia requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar2" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar2" fxFlexFill>
+              <mat-select #ciudad="ngModel" placeholder="{{placeholders[5]}}" name="ciudad" [(ngModel)]="concesionarioEnte.ciudad" (selectionChange)="loadLocalidad($event)" [disabled]="viewing || ciudades.length === 0" [compareWith]="compareId">
+                <app-gefco-mat-filter [array]="ciudades" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad">
+                  {{ ciudad.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="ciudad.hasError('required')">
+                Ciudad requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar3" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar3" fxFlexFill>
+              <mat-select #localidad="ngModel" placeholder="{{placeholders[3]}}" name="localidad" [(ngModel)]="concesionarioEnte.localidad" [disabled]="viewing || localidades.length === 0" [compareWith]="compareId">
+                <app-gefco-mat-filter [array]="localidades" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let localidad of localidades" [value]="localidad">
+                  {{ localidad.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="localidad.hasError('required')">
+                localidad requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput  #codigoPostalInput="ngModel" [(ngModel)]="concesionarioEnte.cod_postal" name="codigopostal"
+                maxlength="50" placeholder="{{placeholders[11]}}" [disabled]="viewing">
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #telefonoInput="ngModel" [(ngModel)]="concesionarioEnte.telefono" name="telefono"
+                maxlength="50" placeholder="{{placeholders[12]}}" [disabled]="viewing" >
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #emailInput="ngModel" [(ngModel)]="concesionarioEnte.mail" name="email"
+                maxlength="50" placeholder="{{placeholders[13]}}" [disabled]="viewing" required>
+              <!-- <mat-error *ngIf="emailInput.hasError('required')">
+                E-mail requerido
+              </mat-error>  -->
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #contactoInput="ngModel" [(ngModel)]="concesionarioEnte.contacto" name="contacto"
+                maxlength="50" placeholder="{{placeholders[14]}}" [disabled]="viewing" >
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #cuitInput="ngModel" [(ngModel)]="concesionarioEnte.cuit" name="cuit"
+                maxlength="50" placeholder="{{placeholders[15]}}" [disabled]="viewing" >
+            </mat-form-field>
+          </div>
+  
+        </div>
+  
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-raised-button mat-dialog-close type="button" color="basic">
+          Volver
+        </button>
+        <button
+            *ngIf="!viewing && creating"
+            mat-raised-button
+            (click)="createConcesionarioEnte()"
+            [disabled]="form.invalid"
+            color="primary">
+            Guardar
+          </button>
+          <button
+            *ngIf="!viewing && !creating"
+            mat-raised-button
+            [disabled]="form.invalid"
+            (click)="updateConcesionarioEnte()"
+            color="primary">
+            Guardar
+          </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

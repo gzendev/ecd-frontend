@@ -1,0 +1,79 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <h2 mat-dialog-title>
+    <span *ngIf="viewing">MODO DE ENTREGA - ver</span>
+    <span *ngIf="!viewing && creating">MODO DE ENTREGA - crear</span>
+    <span *ngIf="!viewing && !creating">MODO DE ENTREGA - editar</span>
+  </h2>
+  <div fxLayout="column" fxLayoutGap="1rem">
+    <form #form="ngForm" novalidate>
+      <mat-dialog-content>
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <mat-select #pais="ngModel" placeholder="{{placeholders[5]}}" name="pais" [(ngModel)]="modoEntrega.pais" [disabled]="viewing || !creating" [compareWith]="compareId" required>
+                <app-gefco-mat-filter [array]="paises" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let pais of paises" [value]="pais">
+                  {{ pais.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="pais.hasError('required')">
+                Pais requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex fxLayoutAlign="start center">
+            <mat-slide-toggle fxFlexFill [(ngModel)]="modoEntrega.activo" [disabled]="viewing" name="activo" color="accent">
+              Activo
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #codigoModoEntregaInput="ngModel" [(ngModel)]="modoEntrega.id" name="codigoModoEntrega"
+              placeholder="{{placeholders[0]}}" [disabled]="viewing || !creating" mask="0000" required>
+              <mat-error *ngIf="codigoModoEntregaInput.hasError('required')">
+                Codigo requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput placeholder="Descripcion" #descripcionInput="ngModel" [(ngModel)]="modoEntrega.descripcion"
+                name="descripcion" placeholder="{{placeholders[1]}}" maxlength="50" [disabled]="viewing" required>
+              <mat-error *ngIf="descripcionInput.hasError('required')">
+                Descripcion requerido
+              </mat-error>
+  
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-raised-button mat-dialog-close type="button" color="basic">
+          Volver
+        </button>
+        <button
+          *ngIf="!viewing && creating"
+          mat-raised-button
+          (click)="createModoEntrega()"
+          [disabled]="form.invalid"
+          color="primary">
+          Guardar
+        </button>
+        <button
+          *ngIf="!viewing && !creating"
+          mat-raised-button
+          [disabled]="form.invalid"
+          (click)="updateModoEntrega()"
+          color="primary">
+          Guardar
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading" fxFlexFill>
+    <h2 mat-dialog-title>
+        <span *ngIf="viewing">TIPO DE DOCUMENTO - ver</span>
+         <span *ngIf="!viewing && creating">TIPO DE DOCUMENTO- crear</span>
+         <span *ngIf="!viewing && !creating">TIPO DE DOCUMENTO- editar</span>
+       </h2>
+       <div fxLayout="column" fxLayoutGap="1rem">
+         <form #form="ngForm" novalidate>
+           <mat-dialog-content>
+             <div fxLayout="row wrap" fxLayoutGap="2rem">
+               <div fxFlex>
+                 <mat-form-field fxFlexFill>
+                   <mat-select
+                     #pais="ngModel"
+                     [(ngModel)]="documento.pais"
+                     name="pais"
+                     [disabled]="viewing || !creating"
+                     [compareWith]="compareId"
+                     placeholder="{{placeholders[5]}}"
+                     required>
+                     <app-gefco-mat-filter [array]="paises"
+                       [converter]="displayMetadataItem" placeholder="Buscar">
+                     </app-gefco-mat-filter>
+                     <mat-option
+                       *ngFor="let pais of paises;"
+                       [value]="pais">
+                       {{ pais.getFullDescription() }}
+                     </mat-option>
+                   </mat-select>
+                   <mat-error *ngIf="pais.hasError('required')">
+                     Pais requerido
+                   </mat-error>
+                 </mat-form-field>
+               </div>
+               <div fxFlex>
+                   <mat-form-field fxFlexFill>
+                     <input
+                       matInput
+                       #codigoDocumentoInput="ngModel"
+                       [(ngModel)]="documento.id"
+                       [disabled]="viewing || !creating"
+                       name="codigoDocumento"
+                       placeholder="{{placeholders[0]}}"
+                       mask="0000"
+                       required>
+                     <mat-error *ngIf="codigoDocumentoInput.hasError('required')">
+                       Codigo requerido
+                     </mat-error>
+                   </mat-form-field>
+                 </div>
+             </div>
+             <div fxLayout="row wrap" fxLayoutGap="2rem">
+               <div fxFlex>
+                 <mat-form-field fxFlexFill>
+                   <input
+                     matInput
+                     #descripcionInput="ngModel"
+                     [(ngModel)]="documento.descripcion"
+                     name="descripcion"
+                     [disabled]="viewing"
+                     placeholder="{{placeholders[1]}}"
+                     maxlength="50"
+                     required>
+                   <mat-error *ngIf="descripcionInput.hasError('required')">
+                     Descripción requerido
+                   </mat-error>
+                 </mat-form-field>
+               </div>
+               <div fxFlex fxLayoutAlign="start center">
+                 <mat-slide-toggle
+                   [(ngModel)]="documento.activo"
+                   [disabled]="viewing"
+                   name="activo"
+                   color="accent">
+                   Activo
+                 </mat-slide-toggle>
+               </div>
+             </div>
+           </mat-dialog-content>
+           <mat-dialog-actions>
+             <button
+               mat-raised-button
+               mat-dialog-close
+               type="button"
+               color="basic">
+               Volver
+             </button>
+             <button
+               *ngIf="!viewing && creating"
+               mat-raised-button
+               (click)="createDocumento()"
+               [disabled]="form.invalid"
+               color="primary">
+               Guardar
+             </button>
+             <button
+               *ngIf="!viewing && !creating"
+               mat-raised-button
+               [disabled]="form.invalid"
+               (click)="updateDocumento()"
+               color="primary">
+               Guardar
+             </button>
+           </mat-dialog-actions>
+         </form>
+         <!-- <app-audit
+           *ngIf="!creating"
+           [crud]="'tipoProveedor'"
+           [lastLog]="tipoProveedor"
+           [logKey]="tipoProveedorLogKey"
+           [commonApi]="true">
+         </app-audit> -->
+       </div> 
+</div>

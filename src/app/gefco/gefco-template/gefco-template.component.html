@@ -1,0 +1,51 @@
+<div class="gefco-templates">
+   <mat-form-field>
+       <mat-select
+       [(ngModel)] ="template"
+       [compareWith]="compareTemplate"
+       (selectionChange)="onTemplateSelect()"
+       placeholder="Template">
+       <mat-option 
+       *ngFor="let template of templates" 
+       [value]="template"
+       [ngClass]="{'readOnly': template.userId != userLogued}">
+           <span *ngIf="template.defaultTemplate">{{ template.name}}</span>
+           <span *ngIf="!template.defaultTemplate"> {{ template.getFullName() }}</span>
+       </mat-option>
+       </mat-select>
+   </mat-form-field> 
+   <button
+   mat-icon-button
+   (click)="openTemplateDialog(true)"
+   matTooltip="Crear Template de filtros y grilla a partir de selección actual">
+   <mat-icon>add_circle</mat-icon>
+   </button>
+   <button
+   *ngIf="template && !template.defaultTemplate"
+   (click)="openTemplateDialog()"
+   mat-icon-button
+   matTooltip="Editar Template">
+   <mat-icon>edit</mat-icon>
+   </button>
+   <button
+    *ngIf="template"
+    mat-icon-button
+    (click)="onTemplateRestart()"
+    matTooltip="Recargar Template (se pierden cambios)">
+    <mat-icon>restore</mat-icon>
+  </button>
+   <button
+   *ngIf="template && !template.defaultTemplate"
+   mat-icon-button
+   (click)="onTemplateUpdate()"
+   matTooltip="Guardar Template a partir de selección actual">
+   <mat-icon>save</mat-icon>
+   </button>
+   <button
+   *ngIf="template && !template.defaultTemplate"
+   mat-icon-button
+   (click)="onTemplateDelete()"
+   matTooltip="Borrar Template">
+    <mat-icon>delete</mat-icon>
+   </button>
+</div>

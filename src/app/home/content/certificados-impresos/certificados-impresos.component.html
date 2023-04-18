@@ -1,0 +1,35 @@
+<div fxFlexFill fxLayout="column" fxLayoutGap="0.5rem">
+  <app-breadcrumb [items]="breadcrumb"></app-breadcrumb>
+  <div fxFlex="0 0 auto" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="1rem">
+    <app-gefco-template
+    [templates]="allTemplates"
+    [template]="currentTemplate"
+    (create)="onTemplateCreate($event)"
+    (update)="onTemplateUpdate($event)"
+    (select)="onTemplateSelect($event)"
+    (delete)="onTemplateDelete($event)"
+    (restart)="onTemplateRestart()">
+    </app-gefco-template>
+  </div>
+    <app-gefco-filters
+    [template]="currentTemplate"
+    [metadata]="filtersMetadata"
+    (search)="onFilterSearch($event)">
+    </app-gefco-filters>
+    <app-gefco-table
+      [template]="currentTemplate"
+      [rows]="rows"
+      [showU]="true"
+      [showD]="true"
+      [showV]="true"
+      [showC]="true"
+      [showM]="true"
+      [listPermission]="listPermission"
+      [writePermission]="writePermission"
+      [readPermission]="readPermission"
+      (exportTable)="onExportTable($event)"
+      (viewRow)="openDialog($event, true)"
+      (editRow)="openDialog($event, false)">
+    </app-gefco-table>
+  </div>
+  

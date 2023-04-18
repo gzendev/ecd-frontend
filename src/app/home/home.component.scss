@@ -1,0 +1,9 @@
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+    display: block;
+  }
+
+  .sidenav-content {
+    height: calc(100vh - 47px) !important;
+    overflow-y: scroll;
+  }
+  

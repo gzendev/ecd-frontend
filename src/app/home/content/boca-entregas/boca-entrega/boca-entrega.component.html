@@ -1,0 +1,229 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <h2 mat-dialog-title>
+    <span *ngIf="viewing">BOCA DE ENTREGA - ver</span>
+    <span *ngIf="!viewing && creating">BOCA DE ENTREGA - Crear</span>
+    <span *ngIf="!viewing && !creating">BOCA DE ENTREGA - editar</span>
+  </h2>
+  <div fxLayout="column" fxLayoutGap="1rem">
+    <form #form="ngForm" novalidate>
+      <mat-dialog-content>
+  
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <mat-select #pais="ngModel" placeholder="{{placeholders[11]}}" name="pais" [(ngModel)]="bocaEntrega.pais" [disabled]="viewing || !creating" [compareWith]="compareId" (selectionChange)="loadCliente($event)" required>
+                <app-gefco-mat-filter [array]="paises" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let pais of paises" [value]="pais" >
+                  {{ pais.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="pais.hasError('required')">
+                Pais requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar" fxFlexFill>
+              <mat-select #cliente="ngModel" placeholder="{{placeholders[19]}}" name="cliente" [(ngModel)]="bocaEntrega.cliente"
+              [disabled]="viewing || !creating || clientes.length === 0" [compareWith]="compareId" (selectionChange)="loadCodigoConcesionario($event)" required>
+              <app-gefco-mat-filter [array]="clientes" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>
+                <mat-option *ngFor="let cliente of clientes" [value]="cliente" >
+                  {{ cliente.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="cliente.hasError('required')">
+                Cliente requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex fxLayoutAlign="start center">
+            <mat-slide-toggle fxFlexFill [(ngModel)]="bocaEntrega.activo" name="activo" color="accent" [disabled]="viewing">
+              Activo
+            </mat-slide-toggle>
+          </div>
+  
+        </div>
+  
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #codigoDirEntregaInput="ngModel" [(ngModel)]="bocaEntrega.id"
+                name="codigoDirEntrega" [disabled]="viewing || !creating" mask="0000" placeholder="{{placeholders[0]}}" required>
+              <mat-error *ngIf="codigoDirEntregaInput.hasError('required')">
+                Codigo requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar1" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar1" fxFlexFill>
+              <mat-select #codConcesionario="ngModel" placeholder="{{placeholders[20]}}" name="codigoConcesionario"
+                [(ngModel)]="bocaEntrega.concesionario" [compareWith]="compareId" [disabled]="viewing || !creating || codigos.length === 0" required>
+                <app-gefco-mat-filter [array]="codigos" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let codigo of codigos" [value]="codigo" >
+                  {{ codigo.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="codConcesionario.hasError('required')">
+                Codigo de concesionario requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput placeholder="Descripcion" #descripcionInput="ngModel"
+                [(ngModel)]="bocaEntrega.descripcion" name="descripcion" placeholder="{{placeholders[1]}}" maxlength="50"
+                [disabled]="viewing" required>
+              <mat-error *ngIf="descripcionInput.hasError('required')">
+                Descripcion requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #direccionInput="ngModel" [(ngModel)]="bocaEntrega.direccion" name="direccion"
+                maxlength="50" placeholder="{{placeholders[3]}}" [disabled]="viewing" required>
+              <mat-error *ngIf="direccionInput.hasError('required')">
+                Direccion requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <mat-select placeholder="{{placeholders[10]}}" name="paisConcesionario"
+                [(ngModel)]="bocaEntrega.paisEnte" [disabled]="viewing" [compareWith]="compareId"
+                (selectionChange)="loadProvincia($event)">
+                <app-gefco-mat-filter [array]="paisesCombo" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let pais of paisesCombo" [value]="pais">
+                  {{ pais.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar2" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar2" fxFlexFill>
+              <mat-select placeholder="{{placeholders[9]}}" name="provincia" [(ngModel)]="bocaEntrega.provincia"
+              [disabled]="viewing || provincias.length === 0" (selectionChange)="loadCiudad($event)" [compareWith]="compareId">
+              <app-gefco-mat-filter [array]="provincias" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>  
+              <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+                  {{ provincia.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar3" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar3" fxFlexFill>
+              <mat-select placeholder="{{placeholders[7]}}" name="ciudad" [(ngModel)]="bocaEntrega.ciudad"
+              [disabled]="viewing || ciudades.length === 0" (selectionChange)="loadLocalidad($event)" [compareWith]="compareId">
+              <app-gefco-mat-filter [array]="ciudades" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>  
+              <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad">
+                  {{ ciudad.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar4" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar4" fxFlexFill>
+              <mat-select placeholder="{{placeholders[5]}}" name="localidad" [(ngModel)]="bocaEntrega.localidad"
+              [disabled]="viewing || localidades.length === 0" [compareWith]="compareId">
+              <app-gefco-mat-filter [array]="localidades" [converter]="displayMetadataItem" placeholder="Buscar">
+              </app-gefco-mat-filter>  
+              <mat-option *ngFor="let localidad of localidades" [value]="localidad">
+                  {{ localidad.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #codigoPostalInput="ngModel" [(ngModel)]="bocaEntrega.cod_postal" name="codigopostal"
+                maxlength="50" placeholder="{{placeholders[12]}}" [disabled]="viewing" >
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #telefonoInput="ngModel" [(ngModel)]="bocaEntrega.telefono" name="telefono"
+                maxlength="50" placeholder="{{placeholders[13]}}" [disabled]="viewing" >
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #emailInput="ngModel" [(ngModel)]="bocaEntrega.email" name="email" maxlength="50"
+                placeholder="{{placeholders[14]}}" [disabled]="viewing" >
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #cuitInput="ngModel" [(ngModel)]="bocaEntrega.cuit" name="cuit" maxlength="50"
+                placeholder="{{placeholders[2]}}" [disabled]="viewing" required>
+              <mat-error *ngIf="cuitInput.hasError('required')">
+                CUIT requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+        </div>
+  
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-raised-button mat-dialog-close type="button" color="basic">
+          Volver
+        </button>
+        <button
+            *ngIf="!viewing && creating"
+            mat-raised-button
+            (click)="createBocaEntrega()"
+            [disabled]="form.invalid"
+            color="primary">
+            Guardar
+          </button>
+          <button
+            *ngIf="!viewing && !creating"
+            mat-raised-button
+            [disabled]="form.invalid"
+            (click)="updateBocaEntrega()"
+            color="primary">
+            Guardar
+          </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

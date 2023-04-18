@@ -1,0 +1,512 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800');
+
+@import '~@angular/material/theming';
+@include mat-core();
+
+// START Material Typography
+$app-typography: mat-typography-config(
+  $font-family: 'Open Sans, sans-serif',
+  $headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(16px, 24px, 500)
+);
+@include angular-material-typography($app-typography);
+// END Material Typography
+
+// START Material Themes
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+$app-primary: mat-palette($mat-indigo);
+$app-accent: mat-palette($mat-green, 500, 900, A100);
+$app-theme: mat-light-theme($app-primary, $app-accent);
+@include angular-material-theme($app-theme);
+// END Material Themes
+
+@import "~primeng/resources/themes/nova/theme.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~primeicons/primeicons.css";
+
+:root {
+  --color-primary: #{mat-color($app-primary)};
+  --color-accent: #{mat-color($app-accent)};
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100vh;
+  margin: 0px;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.5;
+  overflow-y: hidden;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+  font-size: 13px;
+  font-weight: 400;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+}
+
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+  display: block;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0px;
+  overflow: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0px;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+}
+
+p {
+  margin-top: 0px;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-size: 13px;
+  color: rgba(0,0,0,.54);
+}
+
+tr {
+  &.active {
+    background: var(--color-primary) !important;
+    td {
+      color: white !important;
+    }
+  }
+}
+
+.font-light {
+  font-weight: 400;
+}
+
+.font-small {
+  font-size: 13px;
+}
+
+.icon-xl {
+  font-size: 100px !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.color-orange {
+  color: orange;
+}
+
+.color-gray {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.state-highlight {
+  background-color: #007ad9 !important;
+  color: white !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.fa-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  color: #bdbdbd;
+}
+
+.sidenav-content {
+  height: calc(100vh - 47px) !important;
+  overflow-y: scroll;
+}
+
+.alert {
+  text-align: right;
+  float: right;
+  width: 200px;
+}
+
+.menu-level-2 {
+  padding-left: 1rem !important;
+}
+
+.menu-level-3 {
+  padding-left: 1.5rem !important;
+}
+
+.menu-level-4 {
+  padding-left: 2rem !important;
+}
+
+.app-alert {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  opacity: 1 !important;
+  font-size: 14px;
+  .prefix {
+    margin: unset !important;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+  }
+  .content {
+    margin: unset !important;
+    padding: 15px !important;
+  }
+}
+
+.table-container {
+  font-size: 11px;
+  overflow-x: auto;
+  overflow-y: auto;
+  &.small-height {
+    max-height: 135px !important;
+  }
+  .mat-header-row {
+    height: 28px !important;
+    background-color: #ddd;
+  }
+  .mat-row {
+    height: 22px !important;
+    &.inactive {
+      background-color: #EDB9B9 !important;
+    }
+  }
+  .mat-header-cell {
+    padding-left: 10px;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+  .mat-cell {
+    font-size: 11px;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+.mat-input-element {
+  &:disabled {
+    color: rgb(84, 84, 84);
+  }
+}
+
+.mat-form-field-auto {
+  .mat-form-field-infix {
+    width: auto;
+  }
+}
+
+.mat-form-field-suffix {
+  font-size: 13px;
+}
+
+.mat-form-field-subscript-wrapper {
+  margin-top: 0.2rem !important;
+  font-size: 11px;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row  {
+  height: 42px !important;
+  .nav-icon {
+    color: white;
+    padding: 0px 5px;
+    //height: 24px;
+  }
+}
+.button-menu{
+ min-height: 0px !important;
+}
+/* .mat-menu-panel{
+  min-height: 20px;
+} */
+.mat-menu-item {
+  font-size: 13px;
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+.mat-sidenav {
+  min-width: 15%;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
+  height: calc(100vh - 47px);
+}
+
+.mat-nav-list {
+  padding-top: 0px !important;
+}
+
+.mat-list-item {
+  height: 35px !important;
+  font-size: 13px !important;
+}
+
+.mat-row {
+  height: 32px !important;
+}
+
+.mat-header-row {
+  height: 32px !important;
+}
+
+.mat-cell {
+  font-size: 13px;
+}
+
+.mat-tab-body {
+  .mat-card, .mat-expansion-panel {
+    margin: 5px;
+    overflow-x: auto;
+  }
+}
+
+.mat-form-field-infix {
+  font-size: 13px;
+}
+
+.mat-slide-toggle-content {
+  font-size: 13px;
+}
+
+.mat-option {
+  height: 35px !important;
+  line-height: 35px !important;
+  font-size: 13px;
+  &.inactive {
+    background-color: #ff6666 !important;
+    color: white !important;
+  }
+}
+
+.mat-expansion-panel-content {
+  .gefco-table {
+    font: initial !important;
+  }
+}
+.mat-expansion-panel-header {
+  height: 38px;
+}
+
+.ui-breadcrumb {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  font-size: 12px !important;
+ 
+  .ui-menuitem-link {
+    display: flex;
+  }
+}
+
+.p-breadcrumb{
+  height: 25px;
+  padding-top: 2px !important;
+  padding-bottom: 3px !important;
+  font-size: 12px !important;
+}
+
+.ui-toast {
+  z-index: 9999 !important;
+  min-width: 20rem;
+  max-width: 40rem;
+}
+
+.ui-tree {
+  width: unset;
+}
+
+.ui-picklist-filter {
+  font-size: 13px !important;
+}
+
+.ui-picklist-caption {
+  font-size: 13px;
+}
+
+.ui-picklist-item {
+  padding: 0.2em 0.857em !important;
+  font-size: 13px;
+}
+
+.gefco-table {
+
+  .ui-table-caption {
+    padding: 0.3em 1em !important;
+  }
+  
+  .ui-widget {
+    font-size: 11px !important;
+  }
+  
+  .ui-inputtext {
+    font-size: 11px !important;
+  }
+  
+  .ui-multiselect .ui-multiselect-panel {
+    min-width: 250px;
+  }
+  
+  .ui-multiselect-label {
+    font-size: 11px !important;
+    font-weight: normal;
+  }
+  
+  .ui-inputwrapper-filled {
+    display: flex;
+  }
+  
+  .sticky {
+    position: sticky;
+    left: 0;
+  }
+
+  .global {
+    height: 37.71px;
+    border-radius: 3px;
+    padding: 0 8px;
+  }
+
+  .sticky-back {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    &.inactive {
+      background-color: #EDB9B9 !important;
+    }
+  }
+
+  .p-dropdown {
+    padding: -10px;
+  }
+  
+  th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0.3em 0.857em;
+    height: 8px;
+    font-size: 11px !important;
+  }
+  
+  tr {
+    &.inactive {
+      background-color: #EDB9B9 !important;
+    }
+    &.ui-state-highlight {
+      background-color: #007ad9 !important;
+    }
+  }
+
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0.2em 0.857em !important;
+    height: 10px;
+    font-size: 11px !important;
+  }
+
+}
+
+.header {
+  background-color: red;
+}
+
+ .gefco-templates {
+   
+  display: flex;
+   align-items: center;
+   
+   .mat-form-field-wrapper {
+     padding-bottom: 0px;
+   }
+   
+   .mat-form-field-appearance-legacy .mat-form-field-underline {
+     bottom: 0px;
+   }
+ }
+
+ .gefco-filters {
+   
+  .mat-expansion-panel-header-title {
+     font-size: 13px !important;
+  }
+   
+  .mat-expansion-panel-header-description {
+     font-size: 13px !important;
+  }
+    /* .content {
+     height: 225px;
+     overflow: auto;
+   }  */ 
+ } 
+
+
+.audit {
+  
+  label {
+    font-size: 13px;
+  }
+  
+  p {
+    font-size: 13px;
+  }
+}
+
+.nuevo {
+  font-size: 12px;
+  padding: 8px;
+}
+
+agm-map {
+  height: 400px;
+}
+
+.cdk-global-scrollblock {
+	position: initial;
+	width: initial;
+	overflow: hidden;
+}
+
+// START Scrollbars
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #dfdfdfe1;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #999999;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #666666;
+}
+// END Scrollbars
+.div-rp{
+  font-size: 13px;
+}

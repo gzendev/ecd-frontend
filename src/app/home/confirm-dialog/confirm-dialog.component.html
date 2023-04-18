@@ -1,0 +1,15 @@
+<ng-container>
+  <h2 mat-dialog-title>¿Por qué se esta mostrando un resultado parcial?</h2>
+
+  <div class="div-rp">Para lograr mayor performance del sistema, la cantidad máxima de registros que se puede visualizar en las grillas es de 1000 filas. Por favor ajuste los filtros para ver la información más revelante, o bien, descarge el resultado completo en formato Excel desde el botón 'Exportar'.</div>
+  
+  <mat-dialog-actions *ngIf="alert">
+    <button
+      mat-raised-button
+      mat-dialog-close
+      type="button"
+      color="basic">
+      {{ 'volver'}}
+    </button>
+  </mat-dialog-actions>
+</ng-container>

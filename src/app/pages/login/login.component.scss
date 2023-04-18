@@ -1,0 +1,107 @@
+body{
+  background-color: #212529;
+}
+.div-banner{
+    height: 40vh !important;
+    background-image: url("../../../assets/img\ gefco.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background: color #212529;
+}
+.login-container{
+    margin-top: 20px;
+    place-content: stretch center;
+    align-items: stretch;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 1e-9px;
+    background-color: #212529;
+}
+.Logistic{
+  color: #fff;
+  text-align: right !important;
+  margin-top: 0px;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+  font-weight: 300;
+}
+.button-div{
+flex-flow: row wrap;
+box-sizing: border-box;
+display: flex;
+margin-top: 20px;
+}
+.boton{
+ width: 200px;
+}
+.login-input {
+  padding-left: 10px !important;
+  background-color: white !important;
+  box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px 0px inset;
+  color: rgb(33, 37, 41);
+  height: 20px;
+  text-decoration: none solid rgb(33, 37, 41);
+  column-rule-color: rgb(33, 37, 41);
+  perspective-origin: 143px 15px;
+  transform-origin: 143px 15px;
+  caret-color: rgb(33, 37, 41);
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px 4px 4px 4px;
+  font: normal normal 400 normal 14px / normal "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  outline: rgb(33, 37, 41) none 0px;
+  padding: 6px 12px;
+  transition: box-shadow 0.3s ease 0s, border-color 0.3s ease 0s;
+}
+
+.login-input:after {
+  color: rgb(33, 37, 41);
+  text-decoration: none solid rgb(33, 37, 41);
+  column-rule-color: rgb(33, 37, 41);
+  caret-color: rgb(33, 37, 41);
+  border: 0px none rgb(33, 37, 41);
+  font: normal normal 400 normal 14px / normal "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  outline: rgb(33, 37, 41) none 0px;
+}
+.login-input:before {
+  color: rgb(33, 37, 41);
+  text-decoration: none solid rgb(33, 37, 41);
+  column-rule-color: rgb(33, 37, 41);
+  caret-color: rgb(33, 37, 41);
+  border: 0px none rgb(33, 37, 41);
+  font: normal normal 400 normal 14px / normal "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  outline: rgb(33, 37, 41) none 0px;
+}
+a:link {
+  color: white;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+}
+.text-white{
+  color: white;
+}
+.form{
+  flex: 1 1 100%;
+  box-sizing: border-box;
+  max-width: 40%;
+}
+.olvido-contraseña{
+  place-content: center;
+  align-items: center;
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0%;
+}
+.mat-form-user{
+  width: 100%;
+}
+.mat-form-pass{
+  width: 100%;
+}

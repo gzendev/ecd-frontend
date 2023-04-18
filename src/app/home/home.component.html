@@ -1,0 +1,13 @@
+<app-header class="header" [sidenav]="sidenav"></app-header>
+<mat-sidenav-container fxLayout="column" fxFlexFill autosize>
+  <mat-sidenav #sidenav mode="side" class="sidenav">
+    <div class="py-2">
+      <app-menu></app-menu>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content autosize>
+    <div class="sidenav-content">
+      <app-content></app-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

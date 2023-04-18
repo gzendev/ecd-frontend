@@ -1,0 +1,141 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <h2 mat-dialog-title>
+    <span *ngIf="viewing">GESTOR - ver</span>
+    <span *ngIf="!viewing && creating">GESTOR - Crear</span>
+    <span *ngIf="!viewing && !creating">GESTOR - editar</span>
+  </h2>
+  <div fxLayout="column" fxLayoutGap="1rem">
+    <form #form="ngForm" novalidate>
+      <mat-dialog-content>
+  
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+          
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <mat-select #pais="ngModel" placeholder="{{placeholders[5]}}" name="pais" [(ngModel)]="gestor.pais" [disabled]="viewing || !creating" [compareWith]="compareId" (selectionChange)="loadCliente($event)" required>
+                <app-gefco-mat-filter [array]="paises" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let pais of paises" [value]="pais">
+                  {{ pais.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="pais.hasError('required')">
+                Pais requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+              <mat-form-field *ngIf="mostrar" fxFlexFill>
+              <mat-select #cliente="ngModel" placeholder="{{placeholders[6]}}" name="cliente" [(ngModel)]="gestor.cliente" [disabled]="viewing || !creating || clientes.length === 0" [compareWith]="compareId" (selectionChange)="loadCuenta($event)" required>
+                <app-gefco-mat-filter [array]="clientes" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let cliente of clientes" [value]="cliente">
+                  {{ cliente.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="cliente.hasError('required')">
+                Cliente requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar1" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+              <mat-form-field *ngIf="mostrar1" fxFlexFill>
+              <mat-select #cuenta="ngModel" placeholder="{{placeholders[7]}}" name="cuenta" [(ngModel)]="gestor.cuenta" [disabled]="viewing || !creating || cuentas.length === 0" [compareWith]="compareId" (selectionChange)="loadConcesionarios($event)" required>
+                <app-gefco-mat-filter [array]="cuentas" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter>
+                <mat-option *ngFor="let cuenta of cuentas" [value]="cuenta" >
+                  {{ cuenta.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="cuenta.hasError('required')">
+                Cuenta requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+        </div>
+        
+        <div fxLayout="row wrap" fxLayoutGap="2rem">
+          
+          <div fxFlex fxLayoutAlign="start center">
+            <mat-slide-toggle fxFlexFill [(ngModel)]="gestor.activo" name="activo" color="accent">
+              Activo
+            </mat-slide-toggle>
+          </div>
+  
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput #codigoGestorInput="ngModel" [(ngModel)]="gestor.id" name="codigogestor"
+              [disabled]="viewing || !creating" mask="0000" placeholder="{{placeholders[0]}}" required>
+              <mat-error *ngIf="codigoGestorInput.hasError('required')">
+                Codigo requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div fxFlex>
+            <mat-form-field fxFlexFill>
+              <input matInput type="text" placeholder="Descripcion" #descripcionInput="ngModel" [(ngModel)]="gestor.descripcion"
+                name="descripcion" placeholder="{{placeholders[1]}}" minlength="1" maxlength="50" [disabled]="viewing" required>
+              <mat-error *ngIf="descripcionInput.hasError('required')">
+                Descripcion requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div fxFlex>
+            <div *ngIf="!mostrar2" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+            <mat-form-field *ngIf="mostrar2" fxFlexFill>
+              <mat-select #concesionario="ngModel" placeholder="Concesionarios" name="concesionarios" [(ngModel)]="gestor.cod_concesionario"  [compareWith]="compareId" [disabled]="codigos.length === 0" required multiple>
+                <!-- <app-gefco-mat-filter [array]="codigos" [converter]="displayMetadataItem" placeholder="Buscar">
+                </app-gefco-mat-filter> -->
+                <mat-option *ngFor="let codigo of codigos" [value]="codigo" [disabled]="viewing || !creating">
+                  {{ codigo.getFullDescription() }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="concesionario.hasError('required')">
+                Codigo de concesionario requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+        </div>
+  
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-raised-button mat-dialog-close type="button" color="basic">
+          Volver
+        </button>
+        <button
+            *ngIf="!viewing && creating"
+            mat-raised-button
+            (click)="createGestor()"
+            [disabled]="form.invalid"
+            color="primary">
+            Guardar
+          </button>
+          <button
+            *ngIf="!viewing && !creating"
+            mat-raised-button
+            [disabled]="form.invalid"
+            (click)="updateGestor()"
+            color="primary">
+            Guardar
+          </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>
